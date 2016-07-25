@@ -1,0 +1,576 @@
+========================================================================================================
+                                                PART == 1
+========================================================================================================
+
+Q-5) What is HABTM? When we use HABTM and when we use HMT withe real life example.
+
+Ans) HABTM also know as Has-And-Belongs-To-Many is reffered to as a many-to-many relationship between database tables in a model. This type of relationship is used when we are addressing many to many relationship between two tables.
+
+For example
+Subscribers and magazines
+In the case of HABTM,
+A subscriber has and belongs to many magazines, and the same way
+A magazine has and belongs to many subscribers.
+whereas in the case of HTM,
+A subscriber can have many magazines through subscribers_magazines, and the same way
+A magazine can have many subscribers through subscribers_magazines.
+
+HABTM and HMT both are used for many to many relationships. Has and belongs to many allows us to connect two models directly without the interference of a third model. Whereas in the case of has and many through, we have to include a join table or we can say a junction table to connect our two models.
+
+========================================================================================================
+Q-6) What is polymorphic association, In which case we need to use it?
+
+Ans) Polymorphic associations are those associations which allows a model to belong to more than one another model on a single association without the need to create more similar models to create association between them.
+
+This type of association is used when we have to use a model which can belong to more than one another
+model on a single association for example in the case of Pictures. An Employee can have pictures and same way products can also have pictures. So the picture model may belong to either an employee or product. So to achieve this we can use polymorphic association.
+
+========================================================================================================
+Q-7) What is asset package pipeline? Why we need to use it? How to enable it and How to disable it?
+
+Ans)The asset pipeline provides a framework to concatenate and minify or compress JavaScript and CSS assets. It also adds the ability to write these assets in other languages and pre-processors such as CoffeeScript, Sass and ERB. It allows assets in your application to be automatically combined with assets from other gems. For example, jquery-rails includes a copy of jquery.js and enables AJAX features in Rails.
+
+We should use asset pipeline because it sends lower number of http requests because the assets get stored in cache memory, and takes minimum time to load a page resulting in lower consumption of bandwidth.
+It can compile multiple assets into one, minify and compress assets, provide digesting of assets to avoid caching issues, and can pre-process alternative languages and turn them into Javascript and CSS.
+
+========================================================================================================
+Q-8) What is REST API?
+
+Ans)REST (REpresentational State Transfer) is an architectural style, and an approach to communications that is often used in the development of Web services. The use of REST is often preferred over the more heavyweight SOAP (Simple Object Access Protocol) style because REST does not leverage as much bandwidth, which makes it a better fit for use over the Internet.
+REST architecture involves reading a designated Web page that contains an XML file. The XML file describes and includes the desired content. Once dynamically defined, consumers may access the interface.
+The REST style emphasizes that interactions between clients and services is enhanced by having a limited number of operations.
+
+REST, which typically runs over HTTP (Hypertext Transfer Protocol), has several architectural constraints:
+1. Decouples consumers from producers
+2. Stateless existence
+3. Able to leverage a cache
+4. Leverages a layered system
+5. Leverages a uniform interface
+
+========================================================================================================
+Q-9) What is Collection and Member in routes?
+
+Ans)Collection and member are both used under a resorce to create routes in that particular resource.
+A member route will require an ID, because it acts on a member. A member route adds a custom action to a specific instance using the URL suffix and HTTP method you provide. Whereas a collection route adds an overload to the collection and/or a non-specific instance. It's up to you to decide exactly what it implies. A collection route doesn't require an ID because it acts on a collection of objects.
+
+========================================================================================================
+Q-10) What is strong parameters in Rails 4?
+
+Ans) In order to prevent against mass-assignment,Rails 4 came up with "Strong Parameters" feature.Using mass-assignment,a malicious hacker could set any attribute of a model.Now,If you make a sample app with Rails 4 and generate a scaffold user with name and email attributes, it will generate a user_params private method :
+
+def user_params
+  params.require(:user).permit(:name, :email)
+end
+
+This method allows that only name and email attributes of the User model can be set from our controller code.
+
+========================================================================================================
+Q-11) What is callbacks? Let me know which callback invoke when?
+
+Ans) Callbacks are methods  that get called at certain moments of an Active Record object's life cycle.In other words,Callbacks allow us to trigger logic before or after an alteration of an object's state.With callbacks it is possible to write code that will run whenever an Active Record object is created, saved, updated, deleted, validated, or loaded from the database.If we talk about a certain operation e.g creating an object ,here is the exact order of all the available callbacks for this specific operation:
+
+    before_validation
+    after_validation
+    before_save
+    around_save
+    before_create
+    around_create
+    after_create
+    after_save
+    after_commit/after_rollback
+
+========================================================================================================
+Q-12) What is validation ?  Different type of validations in rails?
+
+Ans) Validations are used to ensure that only valid data is saved into your database. Before saving an Active Record object, Rails runs your validations. If these validations produce any errors, Rails does not save the object.Here are some  predefined validations in  Active Record and we can easily use them for server side validations.
+
+Acceptance
+
+This type of validation is used to see if a checkbox is checked or not, for example accepting terms and conditions etc. We don't need to create a special column in our user table to see if the checkbox is checked or not. It's created virtually.
+    class User < ActiveRecord::Base
+      validates :terms_of_service, acceptance: true
+    end
+
+Presence
+
+This validation is used to check if the user has filled the specific field or not. For example, there is a registration form in which user has to fill his details. Now for an instance there is an address field which has to be compulsorily filled then we can use this validation in our user model.
+    class User < ActiveRecord::Base
+      validates :address, presence: true
+    end
+
+========================================================================================================
+Q-13) How to debug rails application? Do you use any gem for it?
+
+Ans) When we unexpectedly encounter any logical errors in our code ,then by debugging the issues we can try to solve the errors.We can incorporate inspect method with the object under scrutiny.E.g raise my_object.inspect
+
+This will throw an exception with the information about the object. We can also use ruby-debug gem.
+
+========================================================================================================
+Q-14) What is egar loading and lazy loading with example.
+
+Ans) One way to improve performance is to cut down on the number of SQL queries. We can do this through eager loading.
+
+User.all(:include => :friends)
+
+Here We are firing only two queries :
+
+1) One for all users.
+
+2) One for all friends of users .
+
+On the other hand With Lazy Loading,When We have an object associated with many objects like a User has many Friends and We want to display a list as in Orkut we fire as many queries as there are friends, plus one for the object itself.
+
+users = User.all
+
+Then query for each user friend , like :
+
+users.each do |user|
+  friend = Friend.find_by(user_id: user.id)
+end
+
+Here
+
+1) One query for all users.
+
+2) N query for N no. of user's friends .
+Basically if Our page has a bunch of images that a user doesn't see until he scrolls, you can wait until he scrolls down and will see the image to load it. That is lazy loading.
+
+=======================================================================================================
+Q-15) How to create nested attribute in rails. Lets say  you have two model, one is User and another is Account. Association between them  as User has one account and Account belongs to user. Then how you create account when you create user. How you validate it?
+Ans)
+    User model
+      has_one :account
+      accepts_nested_attributes_for :account //This method allows us to modify instances of account using the same mass-assignment facility on User that makes simple forms so trivial. accepts_nested_attributes_for adds a writer method _attributes to the model
+
+    Account model
+      belongs_to :user
+      validates_presence_of :account_number,:account_type
+
+    #Now here is the new and create method of the users controller
+    def new
+      @user = User.new
+      account = @user.account.build
+    end
+
+    def create
+      @user = User.new(user_params)
+      respond_to do |format|
+        if @user.save
+
+          format.html { redirect_to @user, notice: 'User was successfully created.' }
+          format.json { render :show, status: :created, location: @user }
+        else
+          format.html { render :new }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+
+    private
+    def user_params
+      params.require(:user).permit(:name, account_attributes: [  :id, :user_id,:account_number,:account_type] )
+    end
+
+    # app/views/users/new.html.erb
+    <%= form_for(@user) do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <%= pluralize(@user.errors.count, "error") %> prohibited
+            this user from being saved:
+          </h2>
+          <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+      <%= f.fields_for :account do |ff| %>
+        <div>
+          <%= ff.label :account_number %>
+          <%= ff.text_field : account_number %>
+        </div>
+        <div>
+          <%= ff.label :account_type %>
+          <%= ff.text_field : account_type %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    <% end %>
+
+
+
+========================================================================================================
+                                                PART == 2
+========================================================================================================
+
+Q-1) Why Ruby is fully object oriented language?
+
+Ans) In Ruby, everything is an object. Every bit of information and code can be given their own properties and actions. Object-oriented programming calls properties by the name instance variables and actions are known as methods. Ruby’s pure object-oriented approach is most commonly demonstrated by a bit of code which applies an action to a number.
+
+  5.times { print "We *love* Ruby -- it's outrageous!" }
+
+In many languages, numbers and other primitive types are not objects. Ruby follows the influence of the Smalltalk language by giving methods and instance variables to all of its types. This eases one’s use of Ruby, since rules applying to objects apply to all of Ruby.
+
+========================================================================================================
+Q-2) What is the difference between string and symbol with example?
+
+Ans) A string is placed either within  single quotes i.e ('') or double quotes i.e ("") whereas on the other hand, a symbol is preceded by a colon i.e (:).
+A string has a variety of methods to use but contrary to that a symbol is like an isolated object.
+Due to the immutable nature of symbols, they are quite memory efficient because if we perform any operations on them then the original object is going to change thus its processing is done with celerity.
+Multiple symbols represents that a single value are identical i.e they refer to the same object whereas the same doesn't hold true for strings.
+For example:
+:001 > "demo".object_id => 174426202.2.3
+:002 > "demo".object_id => 175142602.2.3
+:003 > "demo".object_id => 175082202.2.3
+:004 > :demo.object_id => 10985882.2.3
+:005 > :demo.object_id => 10985882.2.3
+:006 > :demo.object_id => 1098588
+(object_id is a method inherited by String class from Object class).
+We generally use symbols like  hash keys where  unique identifier is needed, not a string.
+
+========================================================================================================
+Q-3) What is the difference between hash and array with example?
+
+Ans) Ruby's arrays and hashes are indexed collections. Both store collections of objects, accessible using a key. With arrays, the key is an integer, whereas hashes support any object as a key. Both arrays and hashes grow as needed to hold new elements. It's more efficient to access array elements, but hashes provide more flexibility. Any particular array or hash can hold objects of differing types; you can have an array containing an integer, a string, and a floating point number.
+
+a=[1,'cat',3.14]  #array with three elements
+# access the first element
+a[0]
+»
+1
+# set the third element
+a[2]=nil
+# dump out the array
+a
+»
+[1, "cat", nil]
+
+Ruby hashes are similar to arrays. A hash literal uses braces rather than square brackets. The literal must supply two objects for every entry: one for the key, the other for the value.
+instSection={
+'cello'=>'string',
+'clarinet'=>'woodwind',
+'drum'=>'percussion',
+'oboe'=>'woodwind',
+'trumpet'=>'brass',
+'violin'=>'string'
+}
+
+========================================================================================================
+Q-4) Let me know about join and inject method for array. Example.
+
+  Ans)Join method is used to combine all array elements into one string.
+  Example Array:
+
+    @arr = ['Hello World','This is a test']
+
+  Example Output:
+
+    Hello WorldThis is a test
+
+  Now, Use the Array#join method (the argument to join is what to insert between the strings - in this case a space):
+
+  @arr.join(", ")
+
+  Example Output:
+
+    Hello World, This is a test
+
+  Whereas, Inject method combines all elements of enum by applying a binary operation, specified by a block or a symbol that names a method or operator.
+
+  If you specify a block, then for each element in enum the block is passed an accumulator value (memo) and the element. If you specify a symbol instead, then each element in the collection will be passed to the named method of memo. In either case, the result becomes the new value for memo. At the end of the iteration, the final value of memo is the return value for the method.
+
+  If you do not explicitly specify an initial value for memo, then uses the first element of collection is used as the initial value of memo.
+
+  Examples:
+
+  # Sum some numbers
+  (5..10).reduce(:+)                            #=> 45
+  # Same using a block and inject
+  (5..10).inject {|sum, n| sum + n }            #=> 45
+  # Multiply some numbers
+  (5..10).reduce(1, :*)                         #=> 151200
+  # Same using a block
+  (5..10).inject(1) {|product, n| product * n } #=> 151200
+  # find the longest word
+  longest = %w{ cat sheep bear }.inject do |memo,word|
+     memo.length > word.length ? memo : word
+  end
+  longest                                       #=> "sheep"
+============================================================================================================
+Q-5) What is call by reference and call by value?
+
+Ans)
+1) Call by value:
+When you are passing values of primitive data types as arguments to the function , then a copy of the values is created and the changes which are done are reflected in the duplicate values and hence, the original values remains unchanged. So, it is known as call by value.
+
+2) Call by Reference:
+When you pass the values of non-primitive data types i.e Reference data types to a method as arguments, then a reference of the values in created and the changes which are done are actually reflected in the original values because a reference of those values is created. So, it is known as call by reference.
+
+========================================================================================================
+Q-6) Different type of access specifiers. Difference between Private and Protected.
+
+Ans) Access controls refers to the methods which allow you to set the access to classes, methods and other members. They are used to encapsulate the components so that we can maintain security of these methods throughout the project.
+Ruby gives us three types of access controls namely :
+  1.Public
+  2.Protected
+  3.Private
+
+  Private:
+  A private method cant be accessed outside the class and only class methods can access private members. That means private method can be called only by the current objects or we can say self. Hence private method can be called from within a class it is declared in as well as all subclasses of this class.
+
+  class A
+    def main_function
+      function1
+    end
+    private
+      def function1
+        puts "hello from #{self.class}"
+      end
+  end
+  class B < A
+    def main_function
+      function1
+    end
+  end
+  A.new.main_function #This will be called successfully and the output will be hello from A
+  B.new.main_function #This will be called successfully and the output will be hello from B
+
+  Protected:
+  Protected methods are also similar to private methods that they can be called by the objects of the class in which they are declared or the subclass of the class in which they are cleared but the difference is they can be called explicitly if the caller is a self method.
+  class A
+    def main_function
+      function1
+    end
+    protected
+      def function1
+        puts "hello from #{self.class}"
+      end
+  end
+  class B < A
+    def main_function
+      function1
+    end
+  end
+  class C < A
+    def main_function
+      self.function1
+    end
+  end
+  A.new.main_function #This will be called successfully and the output will give Hello from A
+  B.new.main_function #This will be called successfully and the output will give Hello from B
+  C.new.main_function #This will be called successfully and the output will give Hello from C
+
+========================================================================================================
+Q-7) What is method overloading? How we use in Ruby?
+
+Ans) Method overloading can be achieved by declaring two methods with the same name and different signatures. These different signatures can be either
+  1.Arguments with different data types, eg: method(int a, int b) vs method(String a, String b) or
+  2.Variable number of arguments, eg: method(a) vs method(a, b)
+
+We cannot achieve method overloading using the first way because there is no data type declaration in ruby(dynamic typed language). So the only way to define the above method is def(a,b)
+
+With the second option, it might look like we can achieve method overloading, but we can't. Let say I have two methods with different number of arguments,
+
+def method(a); end;
+def method(a, b = true); end; # second argument has a default value
+
+method(10)
+# Now the method call can match the first one as well as the second one,
+# so here is the problem.
+So the latter method will be called if we call 2 methods with same name.
+
+========================================================================================================
+Q-8) What is method overriding? How to use in Ruby?
+
+Ans) Method overriding, in object oriented programming, is a language feature that allows a subclass to provide a specific implementation of a method that is already provided by one of its superclasses. The implementation in the subclass overrides (replaces) the implementation in the superclass.
+
+Here's an example:
+
+  class A
+    def a
+      puts 'In class A'
+    end
+  end
+
+  class B < A
+    def a
+      puts 'In class B'
+    end
+  end
+
+  b = B.new
+  b.a
+The method a in class B overrides the method a in class A.
+
+========================================================================================================
+Q-9) What is block? How to pass a block to a method as a parameter.
+
+Ans) We could pass a chunk of code into a method as it was an argument.While the method runs,it can invoke(execute) the block one or more times.Methods and Blocks work in tandem to process our data.
+  def my_method(&my_block)
+    ==
+    my_block.call
+    ==
+  end
+
+&(ampersand) symbol before the last parameter ,here ruby expects a block ,it will take a block,convert it to an object and store it in that parameter.
+
+  my_method do
+    ===
+    ===
+  end
+
+here, a call to my_method with a block.Next Example
+
+  def twice(&my_block)
+    my_block.call
+    my_block.call
+  end
+
+this method is functionally equivalent to
+
+  def twice
+    yield
+    yield
+  end
+
+Here, the yield keyword will find and invoke the block a method was called with -there's no need to declare a parameter to accept the block.
+
+========================================================================================================
+Q-10) Difference between closer, lambda and proc?
+
+Ans) One difference is in the way they handle arguments. Creating a proc using proc {} and Proc.new {} are equivalent. However, using lambda {} gives you a proc that checks the number of arguments passed to it.
+
+An example:
+
+p = Proc.new {|a, b| puts a**2+b**2 } # => #<Proc:0x3c7d28@(irb):1>
+p.call 1, 2 # => 5
+p.call 1 # => NoMethodError: undefined method `**' for nil:NilClass
+p.call 1, 2, 3 # => 5
+l = lambda {|a, b| puts a**2+b**2 } # => #<Proc:0x15016c@(irb):5 (lambda)>
+l.call 1, 2 # => 5
+l.call 1 # => ArgumentError: wrong number of arguments (1 for 2)
+l.call 1, 2, 3 # => ArgumentError: wrong number of arguments (3 for 2)
+
+n addition, using return inside a lambda returns the value of that lambda, but using return in a proc returns from the enclosing block.
+
+lambda { return :foo }.call # => :foo
+return # => LocalJumpError: unexpected return
+Proc.new { return :foo }.call # => LocalJumpError: unexpected return
+
+So for most quick uses they're the same, but if you want automatic strict argument checking (which can also sometimes help with debugging), or if you need to use the return statement to return the value of the proc, use lambda.
+
+========================================================================================================
+Q-11) What is New key word?
+
+Ans) Active Record objects can be created from a hash, a block or have their attributes manually set after creation. The new method will return a new object while create will return the object and save it to the database.
+
+class MyClass
+
+end
+
+my_obj = MyClass.new
+This will create an instance of the class,
+
+========================================================================================================
+Q-12) What is the use of super key word?
+
+Ans) Ruby provides us with a built-in function called super that allows us to call methods up the inheritance hierarchy. When you call super from within a method, it will search the inheritance hierarchy for a method by the same name and then invoke it
+
+ class Animal
+  def speak
+    "Hello!"
+  end
+end
+
+class GoodDog < Animal
+  def speak
+    super + " from GoodDog class"
+  end
+end
+
+sparky = GoodDog.new
+sparky.speak        => "Hello! from GoodDog class"
+
+========================================================================================================
+Q-13) What is mixins?
+
+Ans) In object-oriented programming languages, a mixin is a class that contains methods for use by other classes without having to be the parent class of those other classes.
+
+  module Swimmable
+    def swim
+      "I'm swimming!"
+    end
+  end
+
+  class Animal; end
+
+  class Fish < Animal
+    include Swimmable         # mixing in Swimmable module
+  end
+
+  class Mammal < Animal
+  end
+
+  class Cat < Mammal
+  end
+
+  class Dog < Mammal
+    include Swimmable         # mixing in Swimmable module
+  end
+
+  And now Fish and Dog objects can swim, but objects of other classes won't be able to:
+  sparky = Dog.new
+  neemo  = Fish.new
+  paws   = Cat.new
+
+  sparky.swim                 # => I'm swimming!
+  neemo.swim                  # => I'm swimming!
+  paws.swim                   # => NoMethodError: undefined method `swim' for #<Cat:0x007fc453152308>
+
+In the above example, we've created a simple Animal class with a speak instance method. We then created GoodDog which subclasses Animal also with a speak instance method to override the inherited version. However, in the subclass' speak method we use super to invoke the speak method from the superclass, Animal, and then we extend the functionality by appending some text to the result.
+
+
+========================================================================================================
+Q-14) What is Class, Module? Difference between them?
+
+Ans) Class in ruby is a combination of characteristics and functions. An object oriented programming involves classes and objects. Inside class we write the methods.
+
+  class GoodDog
+    def color
+    end
+
+    def breed
+    end
+  end
+In ruby we simply write class with first word in capital letter.
+
+A module is a collection of behaviors that is useable in other classes via mixins. A module is "mixed in" to a class using the include reserved word.
+
+  module Speak
+    def speak(sound)
+      puts "#{sound}"
+    end
+  end
+
+  class GoodDog
+    include Speak
+  end
+
+  class HumanBeing
+    include Speak
+  end
+
+  sparky = GoodDog.new
+  sparky.speak("Arf!")        # => Arf!
+  bob = HumanBeing.new
+  bob.speak("Hello!")         # => Hello!
